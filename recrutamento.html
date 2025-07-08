@@ -136,6 +136,7 @@
   <footer>
     <p>&copy; 2025 Los Pollos – Todos os direitos reservados</p>
   </footer>
+
   <script>
     function mascaraTelefone(input) {
       let valor = input.value.replace(/\D/g, '').substring(0, 6);
@@ -182,6 +183,12 @@
       }
 
       const [_, dia, mes, ano, hora, minuto] = match;
+
+      if (parseInt(hora) > 23 || parseInt(minuto) > 59) {
+        alert("⚠️ Hora ou minuto inválido. Hora deve ser até 23 e minuto até 59.");
+        return;
+      }
+
       const dataEntrevista = new Date(`${ano}-${mes}-${dia}T${hora}:${minuto}:00`);
       const agora = new Date();
       const minAdiantamento = new Date(agora.getTime() + 30 * 60000);
