@@ -159,84 +159,94 @@
       input.value = formatado;
     }
 
-    function enviarRecrutamento() {
-      const discord = document.getElementById("discord").value.trim();
-      const nome = document.getElementById("nome").value.trim();
-      const rg = document.getElementById("rg").value.trim();
-      const telefone = document.getElementById("telefone").value.trim();
-      const idade = document.getElementById("idade").value.trim();
-      const nivel = document.getElementById("nivel").value.trim();
-      const tempo = document.getElementById("tempo").value.trim();
-      const entrevista = document.getElementById("entrevista").value.trim();
+function enviarRecrutamento() {
+  const discord = document.getElementById("discord").value.trim();
+  const nome = document.getElementById("nome").value.trim();
+  const rg = document.getElementById("rg").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const idade = document.getElementById("idade").value.trim();
+  const nivel = document.getElementById("nivel").value.trim();
+  const tempo = document.getElementById("tempo").value.trim();
+  const entrevista = document.getElementById("entrevista").value.trim();
 
-      if (!discord || !nome || !rg || !telefone || !idade || !nivel || !tempo || !entrevista) {
-        alert("⚠️ Preencha todos os campos.");
-        return;
-      }
+  if (!discord || !nome || !rg || !telefone || !idade || !nivel || !tempo || !entrevista) {
+    alert("⚠️ Preencha todos os campos.");
+    return;
+  }
 
-      const dataRegex = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/;
-      const match = entrevista.match(dataRegex);
+  const dataRegex = /^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})$/;
+  const match = entrevista.match(dataRegex);
 
-      if (!match) {
-        alert("⚠️ Data e hora inválidas. Use o formato: DD/MM/AAAA HH:MM");
-        return;
-      }
+  if (!match) {
+    alert("⚠️ Data e hora inválidas. Use o formato: DD/MM/AAAA HH:MM");
+    return;
+  }
 
-      const [_, dia, mes, ano, hora, minuto] = match;
+  const [_, dia, mes, ano, hora, minuto] = match;
+  if (parseInt(hora) > 23 || parseInt(minuto) > 59) {
+    alert("⚠️ Hora ou minuto inválido. Hora deve ser até 23 e minuto até 59.");
+    return;
+  }
 
-      if (parseInt(hora) > 23 || parseInt(minuto) > 59) {
-        alert("⚠️ Hora ou minuto inválido. Hora deve ser até 23 e minuto até 59.");
-        return;
-      }
+  const dataEntrevista = new Date(`${ano}-${mes}-${dia}T${hora}:${minuto}:00`);
+  const agora = new Date();
+  const minAdiantamento = new Date(agora.getTime() + 30 * 60000);
 
-      const dataEntrevista = new Date(`${ano}-${mes}-${dia}T${hora}:${minuto}:00`);
-      const agora = new Date();
-      const minAdiantamento = new Date(agora.getTime() + 30 * 60000);
+  if (dataEntrevista <= minAdiantamento) {
+    alert("⚠️ A data da entrevista deve ser pelo menos 30 minutos à frente do horário atual.");
+    return;
+  }
 
-      if (dataEntrevista <= minAdiantamento) {
-        alert("⚠️ A data da entrevista deve ser pelo menos 30 minutos à frente do horário atual.");
-        return;
-      }
-
-      const mensagem = `📋 **NOVA INSCRIÇÃO - LOS POLLOS**\n\n` +
-        `🕹️ Discord: ${discord}\n` +
-        `👤 Nome: ${nome}\n` +
-        `🪪 RG: ${rg}\n` +
-        `📱 Telefone: ${telefone}\n` +
-        `🎂 Idade: ${idade}\n` +
-        `🎖️ Nível do Personagem: ${nivel}/100\n` +
-        `⏳ Tempo na Cidade: ${tempo}\n` +
-        `🗓️ Data e Hora para Entrevista: ${entrevista}\n\n` +
-        `<@&1390788512592171190>`;
-
-      const webhookUrl = "https://discord.com/api/webhooks/1394024964192997397/GbA9HF_mRNAruLHrSLJF8HIiuqA1RClDQlu-yc8odPffNJa3CQf80UuLbgUKnfWp6uJj";
-
-      fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: mensagem })
-      })
-      .then(res => {
-        if (res.ok) {
-          document.getElementById("confirmacao").innerHTML =
-            "✅ Recrutamento enviado! Em breve um de nossos recrutadores irá entrar em contato via Discord ou Telefone para confirmar sua entrevista, <strong>FIQUE ATENTO!!!!</strong>";
-
-          const botao = document.getElementById("botaoEnviar");
-          botao.disabled = true;
-          botao.innerText = "Você já solicitou o recrutamento";
-
-          setTimeout(() => {
-            botao.disabled = false;
-            botao.innerText = "Enviar Recrutamento";
-          }, 300000);
-        } else {
-          alert("❌ Erro ao enviar recrutamento.");
+  const embed = {
+    content: "<@&1393982112276676618>",
+    embeds: [
+      {
+        title: "📋 Nova Inscrição - Los Pollos",
+        color: 16766720,
+        thumbnail: {
+          url: "https://i.ibb.co/0jw1Mg6G/LO-removebg-preview.png"
+        },
+        fields: [
+          { name: "👤 Dados do Candidato", value: `**Nome:** ${nome}\n**Discord:** ${discord}\n**RG:** ${rg}\n**Telefone:** ${telefone}`, inline: false },
+          { name: "🎮 Informações RP", value: `**Idade:** ${idade}\n**Nível na Cidade:** ${nivel}/100\n**Tempo na Cidade:** ${tempo}`, inline: false },
+          { name: "🗓️ Entrevista", value: `**Data e Hora:** ${entrevista}`, inline: false }
+        ],
+        footer: {
+          text: nome
         }
-      })
-      .catch(err => {
-        alert("❌ Erro de conexão com o Discord: " + err.message);
-      });
+      }
+    ]
+  };
+
+  const webhookUrl = "https://discord.com/api/webhooks/1394024964192997397/GbA9HF_mRNAruLHrSLJF8HIiuqA1RClDQlu-yc8odPffNJa3CQf80UuLbgUKnfWp6uJj";
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(embed)
+  })
+  .then(res => {
+    if (res.ok) {
+      document.getElementById("confirmacao").innerHTML =
+        "✅ Recrutamento enviado! Em breve um de nossos recrutadores irá entrar em contato via Discord ou Telefone para confirmar sua entrevista, <strong>FIQUE ATENTO!!!!</strong>";
+
+      const botao = document.getElementById("botaoEnviar");
+      botao.disabled = true;
+      botao.innerText = "Você já solicitou o recrutamento";
+
+      setTimeout(() => {
+        botao.disabled = false;
+        botao.innerText = "Enviar Recrutamento";
+      }, 300000);
+    } else {
+      alert("❌ Erro ao enviar recrutamento.");
     }
+  })
+  .catch(err => {
+    alert("❌ Erro de conexão com o Discord: " + err.message);
+  });
+}
+
   </script>
 </body>
 </html>
