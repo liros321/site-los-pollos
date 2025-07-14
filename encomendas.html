@@ -4,148 +4,187 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Los Pollos - Encomendas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Orbitron', sans-serif;
       margin: 0;
       padding: 0;
       background: url('https://iili.io/F1RpCtS.png') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: -1;
+    }
+    header, footer {
+      background: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 15px;
+      color: #FFD700;
+      font-weight: bold;
+      text-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .form-section {
+      width: 300px;
+      margin: 0 auto 30px auto;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 6px;
+      border-radius: 5px;
+      border: none;
+      background: #1a1a1a;
+      color: #fff;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-    }
-
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
+      justify-content: space-between;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: -1;
     }
-
-    .form-container {
-      background-color: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      padding: 25px;
-      margin-top: 40px;
-      width: 90%;
-      max-width: 500px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #FFD700;
     }
-
-    h2 {
-      text-align: center;
-      color: #FFD700;
-      margin-top: 0;
+    .card img {
+      max-width: 100px;
+      height: auto;
+      margin-bottom: 10px;
     }
-
-    label {
-      display: block;
+    .card label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       margin-top: 10px;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      background-color: #1a1a1a;
-      border: none;
-      border-radius: 5px;
-      color: #fff;
-    }
-
-    button {
-      margin-top: 20px;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background-color: #FFD700;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
       font-size: 16px;
+      color: #FFD700;
     }
-
-    button:hover {
-      background-color: #e6c200;
-    }
-
-    .total {
-      background-color: #333;
-      padding: 10px;
-      margin-top: 15px;
+    .card input[type="number"] {
+      margin-top: 5px;
+      width: 60px;
+      padding: 5px;
       border-radius: 5px;
+      border: none;
       text-align: center;
-      font-size: 18px;
     }
-
-    .mensagem-sucesso {
-      margin-top: 15px;
-      text-align: center;
-      color: #0f0;
+    .cart-box {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+      box-shadow: 0 0 15px #FFD700;
+      animation: pulseGlow 2s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 10px #FFD700; }
+      to { box-shadow: 0 0 25px #FFD700; }
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      border-bottom: 1px solid #FFD700;
+    }
+    #cartTotal {
+      text-align: right;
+      margin-top: 8px;
       font-weight: bold;
+      color: #FFD700;
     }
-
-    footer {
-      background: rgba(0, 0, 0, 0.7);
-      text-align: center;
-      padding: 10px;
-      color: #ccc;
-      width: 100%;
-      position: fixed;
-      bottom: 0;
+    #encomendarBtn {
+      background: #FFD700;
+      color: #000;
+      padding: 5px 10px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-top: 8px;
+      transition: transform 0.3s;
+    }
+    #encomendarBtn:hover {
+      transform: scale(1.1);
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Informações do Pedido</h2>
-    <label>Nome:
-      <input type="text" id="nome" required>
-    </label>
-    <label>RG:
-      <input type="text" id="rg" maxlength="6" placeholder="Máx. 6 dígitos" oninput="this.value = this.value.replace(/\\D/g, '').substring(0, 6)">
-    </label>
-    <label>Telefone:
-      <input type="text" id="telefone" maxlength="7" placeholder="000-000" oninput="mascararTelefone(this)">
-    </label>
-    <label>Discord:
-      <input type="text" id="discord">
-    </label>
-
-    <h2>Itens</h2>
-    <label>🍟 Batata:
-      <input type="number" id="batata" value="0">
-    </label>
-    <label>🥤 Soda:
-      <input type="number" id="soda" value="0">
-    </label>
-    <label>🍗 Frango:
-      <input type="number" id="frango" value="0">
-    </label>
-    <label>🥡 Combo Especial:
-      <input type="number" id="combo" value="0">
-    </label>
-
-    <button onclick="calcular()">Calcular</button>
-    <div class="total" id="total">Total: R$ 0</div>
-    <button id="encomendarBtn" onclick="encomendar()">Encomendar</button>
-    <div class="mensagem-sucesso" id="sucessoMsg"></div>
+  <header>🍗 Los Pollos - Encomendas</header>
+  <div class="container">
+    <div class="form-section">
+      <input type="text" id="nome" placeholder="Nome" required>
+      <input type="text" id="rg" placeholder="RG (até 6 dígitos)" maxlength="6" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 6)">
+      <input type="text" id="telefone" placeholder="000-000" maxlength="7" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6); if(this.value.length > 3){this.value = this.value.slice(0,3) + '-' + this.value.slice(3);} ">
+      <input type="text" id="discord" placeholder="Usuário Discord">
+    </div>
+    <div class="cards">
+      <div class="card">
+        <img src="https://i.ibb.co/KY9H50V/Design-sem-nome-1-removebg-preview.png" alt="Frango">
+        <label>Frango:
+          <input type="number" id="frango" value="0" min="0" oninput="updateCart()">
+        </label>
+      </div>
+      <div class="card">
+        <img src="https://i.ibb.co/7dbFGKs4/Design-sem-nome-2-removebg-preview.png" alt="Batata">
+        <label>Batata:
+          <input type="number" id="batata" value="0" min="0" oninput="updateCart()">
+        </label>
+      </div>
+      <div class="card">
+        <img src="https://i.ibb.co/pvfjmWbP/Design-sem-nome-3-removebg-preview.png" alt="Soda">
+        <label>Soda:
+          <input type="number" id="soda" value="0" min="0" oninput="updateCart()">
+        </label>
+      </div>
+      <div class="card">
+        <img src="https://i.ibb.co/39NP7dPT/Design-sem-nome-4-removebg-preview.png" alt="Combo">
+        <label>Combo Especial:
+          <input type="number" id="combo" value="0" min="0" oninput="updateCart()">
+        </label>
+      </div>
+    </div>
+    <div class="cart-box" id="cartBox">
+      <div id="cartItems"></div>
+      <div id="cartTotal">Total: R$ 0</div>
+      <div style="text-align: right;">
+        <button onclick="encomendar()" id="encomendarBtn">Encomendar</button>
+      </div>
+      <div id="sucessoMsg"></div>
+    </div>
   </div>
-
-  <footer>
-    © 2025 Los Pollos. Todos os direitos reservados.
-  </footer>
-
+  <footer>© 2025 Los Pollos. Todos os direitos reservados.</footer>
   <script>
     const precoTabela = {
       batata: 1200,
@@ -154,94 +193,77 @@
       combo: 3600
     };
 
-    function mascararTelefone(input) {
-      let valor = input.value.replace(/\D/g, '').substring(0, 6);
-      if (valor.length >= 4) {
-        input.value = valor.substring(0, 3) + '-' + valor.substring(3);
-      } else {
-        input.value = valor;
-      }
+    function updateCart() {
+      const items = ['batata', 'soda', 'frango', 'combo'];
+      let total = 0;
+      let cartHTML = '';
+      items.forEach(id => {
+        const qty = parseInt(document.getElementById(id).value) || 0;
+        if (qty > 0) {
+          const preco = precoTabela[id];
+          total += qty * preco;
+          cartHTML += `<div class='cart-item'><span>${id.charAt(0).toUpperCase() + id.slice(1)}:</span><span>${qty} x R$ ${preco.toLocaleString()}</span></div>`;
+        }
+      });
+      document.getElementById("cartItems").innerHTML = cartHTML || '<div>Nenhum item no carrinho.</div>';
+      document.getElementById("cartTotal").innerText = `Total: R$ ${total.toLocaleString()}`;
     }
-
-    function calcular() {
-      const batata = parseInt(document.getElementById("batata").value) || 0;
-      const soda = parseInt(document.getElementById("soda").value) || 0;
-      const frango = parseInt(document.getElementById("frango").value) || 0;
-      const combo = parseInt(document.getElementById("combo").value) || 0;
-
-      const total = (batata * precoTabela.batata) +
-                    (soda * precoTabela.soda) +
-                    (frango * precoTabela.frango) +
-                    (combo * precoTabela.combo);
-
-      document.getElementById("total").innerText = `Total: R$ ${total.toLocaleString()}`;
-    }
+    window.onload = updateCart;
 
     function encomendar() {
       const nome = document.getElementById("nome").value.trim();
       const rg = document.getElementById("rg").value.trim();
       const tel = document.getElementById("telefone").value.trim();
       const discord = document.getElementById("discord").value.trim();
-
       const batata = parseInt(document.getElementById("batata").value) || 0;
       const soda = parseInt(document.getElementById("soda").value) || 0;
       const frango = parseInt(document.getElementById("frango").value) || 0;
       const combo = parseInt(document.getElementById("combo").value) || 0;
+      const total = (batata * precoTabela.batata) + (soda * precoTabela.soda) + (frango * precoTabela.frango) + (combo * precoTabela.combo);
 
-      if (!nome || !rg || !tel || !discord) {
-        alert("Preencha todos os campos obrigatórios.");
-        return;
-      }
+const embed = {
+  embeds: [
+    {
+      title: "🍗 Nova Encomenda - Los Pollos",
+      color: 16766720,
+      thumbnail: {
+        url: "https://i.ibb.co/0jw1Mg6G/LO-removebg-preview.png"
+      },
+      fields: [
+        { name: "📋 Dados do Cliente", value: "**Nome:** " + nome + "\n**RG:** " + rg + "\n**Telefone:** " + tel + "\n**Discord:** " + discord, inline: false },
+        { name: "🛒 Itens Encomendados", value:
+          (batata ? `🍟 Batata: ${batata}\n` : '') +
+          (soda ? `🥤 Soda: ${soda}\n` : '') +
+          (frango ? `🍗 Frango: ${frango}\n` : '') +
+          (combo ? `🥡 Combo Especial: ${combo}\n` : ''),
+          inline: false
+        },
+        { name: "💰 Total", value: `R$ ${total.toLocaleString()}`, inline: false }
+      ],
+      footer: { text: nome }
+    }
+  ],
+  content: "<@&1393979694075875369>"
+};
 
-      const total = (batata * precoTabela.batata) +
-                    (soda * precoTabela.soda) +
-                    (frango * precoTabela.frango) +
-                    (combo * precoTabela.combo);
-
-      if (total === 0) {
-        alert("Insira pelo menos um item para encomendar.");
-        return;
-      }
-
-      const conteudo = `
-**🍗 NOVA ENCOMENDA – LOS POLLOS**
-👤 Nome: ${nome}
-🪪 RG: ${rg}
-📱 Telefone: ${tel}
-🎮 Discord: ${discord}
-
-**Itens:**
-🍟 Batata: ${batata}
-🥤 Soda: ${soda}
-🍗 Frango: ${frango}
-🥡 Combo Especial: ${combo}
-
-💰 Total: R$ ${total.toLocaleString()}
-<@&1390788522071556096>
-      `;
-
-      const webhook = "https://discord.com/api/webhooks/1394024624454631484/x-nvl_PZHMrSpKM5PQ4lGIaJmUbTtmQ9EcOqcD9Olj-53TFaxmWB5H9xrZWKhIQOzWTp";
-
-      fetch(webhook, {
+      fetch("https://discord.com/api/webhooks/1394024624454631484/x-nvl_PZHMrSpKM5PQ4lGIaJmUbTtmQ9EcOqcD9Olj-53TFaxmWB5H9xrZWKhIQOzWTp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: conteudo })
-      })
-      .then(res => {
+        body: JSON.stringify(embed)
+      }).then(res => {
         if (res.ok) {
           document.getElementById("encomendarBtn").disabled = true;
           document.getElementById("encomendarBtn").innerText = "ENCOMENDA FEITA";
-          document.getElementById("sucessoMsg").innerText = "✅ Sua encomenda foi feita com sucesso. Fique atento ao seu telefone e Discord!";
+          document.getElementById("sucessoMsg").innerText = "✅ Sua encomenda foi solicitada, em breve iremos entrar em contato via telefone ou discord, fique atento!!!";
           setTimeout(() => {
             document.getElementById("encomendarBtn").disabled = false;
             document.getElementById("encomendarBtn").innerText = "Encomendar";
             document.getElementById("sucessoMsg").innerText = "";
-          }, 300000); // 5 minutos
+          }, 300000);
         } else {
           alert("Erro ao enviar encomenda.");
         }
-      })
-      .catch(err => {
+      }).catch(err => {
         alert("Erro ao conectar ao Discord: " + err.message);
       });
     }
