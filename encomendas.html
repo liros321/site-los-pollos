@@ -145,10 +145,13 @@
   <div class="container">
     <div class="form-section">
       <input type="text" id="nome" placeholder="Nome" required>
-      <input type="text" id="rg" placeholder="RG (até 6 dígitos)" maxlength="6" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 6)">
-      <input type="text" id="telefone" placeholder="000-000" maxlength="7" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6); if(this.value.length > 3){this.value = this.value.slice(0,3) + '-' + this.value.slice(3);} ">
-      <input type="text" id="discord" placeholder="Usuário Discord">
+      <input type="text" id="rg" placeholder="RG (até 6 dígitos)" maxlength="6" inputmode="numeric"
+             oninput="this.value = this.value.replace(/[^0-9]/g, '').substring(0, 6)">
+      <input type="text" id="telefone" placeholder="000-000" maxlength="7"
+             oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6); if(this.value.length > 3){this.value = this.value.slice(0,3) + '-' + this.value.slice(3);} ">
+      <input type="text" id="discord" placeholder="Usuário Discord" required>
     </div>
+
     <div class="cards">
       <div class="card">
         <img src="https://i.ibb.co/KY9H50V/Design-sem-nome-1-removebg-preview.png" alt="Frango">
@@ -175,6 +178,7 @@
         </label>
       </div>
     </div>
+
     <div class="cart-box" id="cartBox">
       <div id="cartItems"></div>
       <div id="cartTotal">Total: R$ 0</div>
@@ -185,6 +189,7 @@
     </div>
   </div>
   <footer>© 2025 Los Pollos. Todos os direitos reservados.</footer>
+
   <script>
     const precoTabela = {
       batata: 1200,
@@ -221,30 +226,40 @@
       const combo = parseInt(document.getElementById("combo").value) || 0;
       const total = (batata * precoTabela.batata) + (soda * precoTabela.soda) + (frango * precoTabela.frango) + (combo * precoTabela.combo);
 
-const embed = {
-  embeds: [
-    {
-      title: "🍗 Nova Encomenda - Los Pollos",
-      color: 16766720,
-      thumbnail: {
-        url: "https://i.ibb.co/0jw1Mg6G/LO-removebg-preview.png"
-      },
-      fields: [
-        { name: "📋 Dados do Cliente", value: "**Nome:** " + nome + "\n**RG:** " + rg + "\n**Telefone:** " + tel + "\n**Discord:** " + discord, inline: false },
-        { name: "🛒 Itens Encomendados", value:
-          (batata ? `🍟 Batata: ${batata}\n` : '') +
-          (soda ? `🥤 Soda: ${soda}\n` : '') +
-          (frango ? `🍗 Frango: ${frango}\n` : '') +
-          (combo ? `🥡 Combo Especial: ${combo}\n` : ''),
-          inline: false
-        },
-        { name: "💰 Total", value: `R$ ${total.toLocaleString()}`, inline: false }
-      ],
-      footer: { text: nome }
-    }
-  ],
-  content: "<@&1393979694075875369>"
-};
+      // ✅ Validação obrigatória
+      if (!nome || !rg || !tel || !discord) {
+        alert("⚠️ Preencha todos os dados do comprador antes de enviar a encomenda!");
+        return;
+      }
+      if (batata + soda + frango + combo === 0) {
+        alert("⚠️ Adicione pelo menos 1 item ao carrinho antes de enviar a encomenda!");
+        return;
+      }
+
+      const embed = {
+        embeds: [
+          {
+            title: "🍗 Nova Encomenda - Los Pollos",
+            color: 16766720,
+            thumbnail: { url: "https://i.ibb.co/0jw1Mg6G/LO-removebg-preview.png" },
+            fields: [
+              { name: "📋 Dados do Cliente", value: `**Nome:** ${nome}\n**RG:** ${rg}\n**Telefone:** ${tel}\n**Discord:** ${discord}`, inline: false },
+              {
+                name: "🛒 Itens Encomendados",
+                value:
+                  (batata ? `🍟 Batata: ${batata}\n` : '') +
+                  (soda ? `🥤 Soda: ${soda}\n` : '') +
+                  (frango ? `🍗 Frango: ${frango}\n` : '') +
+                  (combo ? `🥡 Combo Especial: ${combo}\n` : ''),
+                inline: false
+              },
+              { name: "💰 Total", value: `R$ ${total.toLocaleString()}`, inline: false }
+            ],
+            footer: { text: nome }
+          }
+        ],
+        content: "<@&1393979694075875369>"
+      };
 
       fetch("https://discord.com/api/webhooks/1394024624454631484/x-nvl_PZHMrSpKM5PQ4lGIaJmUbTtmQ9EcOqcD9Olj-53TFaxmWB5H9xrZWKhIQOzWTp", {
         method: "POST",
