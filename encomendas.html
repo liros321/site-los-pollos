@@ -77,11 +77,14 @@
       transform: scale(1.05);
       box-shadow: 0 0 20px #FFD700;
     }
-    .card img {
-      max-width: 100px;
-      height: auto;
-      margin-bottom: 10px;
-    }
+.card img {
+  width: 100px;        /* força todas as imagens a terem a mesma largura */
+  height: 100px;       /* força a mesma altura */
+  object-fit: contain; /* mantém proporção sem distorcer */
+  display: block;
+  margin: 0 auto 10px auto; /* centraliza a imagem no card */
+}
+
     .card label {
       display: flex;
       flex-direction: column;
@@ -160,7 +163,7 @@
         </label>
       </div>
       <div class="card">
-        <img src="https://i.ibb.co/7dbFGKs4/Design-sem-nome-2-removebg-preview.png" alt="Batata">
+        <img src="https://i.ibb.co/Dgvzx4tz/batata-los-pollos.png" alt="Batata">
         <label>Batata:
           <input type="number" id="batata" value="0" min="0" oninput="updateCart()">
         </label>
